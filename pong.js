@@ -6,6 +6,7 @@ var animate = window.requestAnimationFrame ||
 var canvas = document.createElement('canvas');
 var width = 700;
 var height = 700;
+var speed = 1;
 canvas.width = width;
 canvas.height = height;
 var context = canvas.getContext('2d');
@@ -30,31 +31,41 @@ var update = function() {
 var balls = [];
 balls[0]= new Ball(width/2, height/2);
 var render = function() {
-  context.fillStyle = "#F00000";
+  context.fillStyle = "#000000";
   context.fillRect(0, 0, width, height);
 	for (var i = 0, len = balls.length; i < len; i++) {
   balls[i].render();
 }
 };
 
+function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
 function Ball(x, y) {
   this.x = x;
   this.y = y;
-  this.x_speed = (Math.random()*6)-3;
+  this.x_speed = (Math.random()*(speed*2))-(speed);
   if (Math.random() < .5){
-	  this.y_speed = 3-Math.abs(this.x_speed);
+	  this.y_speed = speed-Math.abs(this.x_speed);
   }
   else
   {
-	  this.y_speed = -1*(3-Math.abs(this.x_speed));
+	  this.y_speed = -1*(speed-Math.abs(this.x_speed));
   }
   this.radius = 5;
+  this.color = getRandomColor();
 }
 
 Ball.prototype.render = function() {
   context.beginPath();
   context.arc(this.x, this.y, this.radius, 2 * Math.PI, false);
-  context.fillStyle = "#000000";
+  context.fillStyle = this.color
   context.fill();
 };
 
